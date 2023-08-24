@@ -10,8 +10,8 @@ defmodule Safrole.DocHandler do
   @spec process(String.t(), Keyword.t()) :: [String.t()]
   def process(filing_text, options \\ []) do
     # Flags for processing ASCII filing (just 1 for now)
-    pretty? <- Keyword.get(options, :pretty, true)
-    utf8? <- Keyword.get(options, :utf8, true)
+    pretty? = Keyword.get(options, :pretty, true)
+    utf8? = Keyword.get(options, :utf8, true)
 
     filing_text
     |> pullout_html_docs()
@@ -25,9 +25,6 @@ defmodule Safrole.DocHandler do
       end
     end)
   end
-
-  @spec process(String.t()) :: [String.t()]
-  def process(filing_text), do: process(filing_text, [])
 
   # Pretty-print the HTML text, using Floki to parse the HTML tree.
   defp prettify_html(html_text, run?)
