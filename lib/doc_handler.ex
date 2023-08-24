@@ -5,9 +5,9 @@ defmodule Safrole.DocHandler do
   """
 
   @doc """
-  Takes in the raw text from an SEC filing's .txt file, moves all the contained HTML documents into a list, cleans the files, and "prettifies" them. If one step fails, then the generated string is the error's `inspect` output.
+  Takes in the raw text from an SEC filing's .txt file, moves all the contained HTML documents into a list, cleans the files, and "prettifies" them.
   """
-  @spec process(String.t(), Keyword.t()) :: [{atom(), String.t()}]
+  @spec process(String.t(), Keyword.t()) :: [{:ok, String.t()} | {:error, any}]
   def process(filing_text, options \\ []) do
     # Flags for processing ASCII filing (just 1 for now)
     pretty? = Keyword.get(options, :pretty, true)
@@ -21,14 +21,14 @@ defmodule Safrole.DocHandler do
       do
         {:ok, pretty_html}
       else
-        err -> {:error, inspect(err)}
+        err -> {:error, err}
       end
     end)
   end
 
   # Pretty-print the HTML text, using Floki to parse the HTML tree.
   defp prettify_html(html_text, run?)
-  defp prettify_html(html_text, false), do: html_text
+  defp prettify_html(html_text, false), do: {:ok, html_text}
   defp prettify_html(html_text, true) do
     case Floki.parse_document(html_text) do
       {:ok, doc_tree} ->

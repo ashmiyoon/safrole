@@ -8,7 +8,7 @@ defmodule SafroleTest do
 
   test "creates stock info map" do
     {:ok, ticker_txt} = Safrole.Cik.download_ticker_txt()
-    stock_info_map = Safrole.Cik.txt_to_stock_infos(ticker_txt)
+    {:ok, stock_info_map} = Safrole.Cik.txt_to_maps(ticker_txt)
     IO.inspect stock_info_map
   end
 end
