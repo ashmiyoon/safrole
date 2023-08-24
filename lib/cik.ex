@@ -19,9 +19,9 @@ defmodule Safrole.Cik do
       with [raw_ticker, raw_cik] <- String.split(line, "\t"),
            stock_info <- %{ticker: String.upcase(raw_ticker), cik: raw_cik}
       do
-        stock_info
+        {:ok, stock_info}
       else
-        err -> err
+        err -> {:error, err}
       end
     end)
   end

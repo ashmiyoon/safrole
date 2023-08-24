@@ -7,7 +7,7 @@ defmodule Safrole.DocHandler do
   @doc """
   Takes in the raw text from an SEC filing's .txt file, moves all the contained HTML documents into a list, cleans the files, and "prettifies" them. If one step fails, then the generated string is the error's `inspect` output.
   """
-  @spec process(String.t(), Keyword.t()) :: [String.t()]
+  @spec process(String.t(), Keyword.t()) :: [{atom(), String.t()}]
   def process(filing_text, options \\ []) do
     # Flags for processing ASCII filing (just 1 for now)
     pretty? = Keyword.get(options, :pretty, true)
@@ -19,9 +19,9 @@ defmodule Safrole.DocHandler do
       with cleaned_html <- replace_junk(raw_html, sec_html_junk_jobs()),
            {:ok, pretty_html} <- prettify_html(cleaned_html, pretty?)
       do
-        pretty_html
+        {:ok, pretty_html}
       else
-        err -> inspect(err)
+        err -> {:error, inspect(err)}
       end
     end)
   end
